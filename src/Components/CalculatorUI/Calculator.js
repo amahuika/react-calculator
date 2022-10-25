@@ -6,9 +6,9 @@ function CalculatorUI() {
   const [first, setFirst] = useState([]);
   const [second, setSecond] = useState([]);
   const [operation, setOperation] = useState("");
-
   const [answer, setAnswer] = useState("");
 
+  // add number on click to array
   function NumberBtn(e) {
     if (answer !== "") {
       setAnswer("");
@@ -20,10 +20,16 @@ function CalculatorUI() {
     }
   }
 
+  // sets the operator
   function SelectedOperation(e) {
-    setOperation(e.target.value);
+    if (first.length > 0) {
+      setOperation(e.target.value);
+    } else {
+      return;
+    }
   }
 
+  // Clear handler
   function ClearInput() {
     setOperation("");
     setFirst([]);
@@ -31,10 +37,50 @@ function CalculatorUI() {
     setAnswer("");
   }
 
-  function Calculate(i) {
+  // back space handler
+  function backspaceHandle() {
+    // pop() from first number
+    if (first.length > 0 && second.length === 0 && operation === "") {
+      const firstArr = first;
+      firstArr.pop();
+      setFirst((v) => [...firstArr]);
+    }
+    // remove operator
+    if (second.length === 0 && operation !== "") {
+      setOperation("");
+    }
+
+    // pop() from second
+    if (second.length > 0) {
+      const secondArr = second;
+      secondArr.pop();
+      setSecond((v) => [...secondArr]);
+    }
+  }
+
+  // calculate function
+  function Calculate(e) {
+    // join array n convert to int
     const parseFirst = parseFloat(first.join(""));
     const parseSecond = parseFloat(second.join(""));
-    console.log(operation);
+
+    // squared operator handler
+    if (e.target.value === "x²" && answer === "") {
+      setAnswer(parseFirst * parseFirst);
+      setFirst([]);
+    }
+
+    // conditions to go further
+    if (
+      answer !== "" ||
+      first.length === 0 ||
+      operation === "" ||
+      second.length === 0
+    ) {
+      return;
+    }
+
+    // switch case for operations
     switch (operation) {
       case "+":
         setAnswer(parseFirst + parseSecond);
@@ -48,11 +94,15 @@ function CalculatorUI() {
       case "x":
         setAnswer(parseFirst * parseSecond);
         break;
+      case "%":
+        setAnswer(parseFirst % parseSecond);
+        break;
 
       default:
         break;
     }
 
+    // clear operation first and second number
     setOperation("");
     setFirst([]);
     setSecond([]);
@@ -64,19 +114,50 @@ function CalculatorUI() {
         <div className="col-md-8 col-lg-5">
           <div className="row mb-1">
             <div>
-              <h5>Simple Calculator</h5>
+              <h2>React Calculator</h2>
             </div>
             <div className="">
               <input
                 type="text"
-                className="form-control "
+                className="form-control text-end fs-4"
                 value={
                   answer === ""
-                    ? first.join("") + operation + second.join("")
-                    : answer
+                    ? first.join("") + " " + operation + " " + second.join("")
+                    : answer.toLocaleString("en-US")
                 }
                 disabled
               />
+            </div>
+          </div>
+          <div className="row my-1">
+            <div className="btn-group">
+              <button
+                value="x²"
+                onClick={Calculate}
+                className="btn btn-outline-secondary btn-sm me-1 border rounded shadow-sm"
+              >
+                x²
+              </button>
+              <button
+                onClick={SelectedOperation}
+                value="%"
+                className="btn btn-outline-secondary btn-sm me-1 border rounded shadow-sm"
+              >
+                %
+              </button>
+              <button
+                onClick={SelectedOperation}
+                value="/"
+                className="btn btn-outline-secondary btn-sm me-1 border rounded shadow-sm"
+              >
+                /
+              </button>
+              <button
+                onClick={backspaceHandle}
+                className="btn btn-outline-dark btn-sm me-1 border rounded shadow-sm"
+              >
+                <small>backspace</small>
+              </button>
             </div>
           </div>
           <div className="row ">
