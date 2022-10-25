@@ -22,10 +22,16 @@ function CalculatorUI() {
 
   // sets the operator
   function SelectedOperation(e) {
+    if (answer !== "") {
+      const splitAnswer = answer;
+      setFirst((u) => [...splitAnswer.toString()]);
+      setOperation(e.target.value);
+
+      setAnswer("");
+    }
+
     if (first.length > 0) {
       setOperation(e.target.value);
-    } else {
-      return;
     }
   }
 
@@ -39,6 +45,9 @@ function CalculatorUI() {
 
   // back space handler
   function backspaceHandle() {
+    if (answer !== "") {
+      ClearInput();
+    }
     // pop() from first number
     if (first.length > 0 && second.length === 0 && operation === "") {
       const firstArr = first;
