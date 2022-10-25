@@ -1,44 +1,47 @@
 import { useState } from "react";
 
+import CalculatorDisplay from "./CalculatorDisplay";
+import CalculatorButtons from "./CalculatorButtons";
+
 import "./Calculator.css";
 
 function CalculatorUI() {
-  const [first, setFirst] = useState([]);
+  const [firstNum, setFirstNum] = useState([]);
   const [second, setSecond] = useState([]);
   const [operation, setOperation] = useState("");
   const [answer, setAnswer] = useState("");
 
   // add number on click to array
-  function NumberBtn(e) {
+  function operationHandler(selection) {
+    if (answer !== "") {
+      const splitAnswer = answer;
+      setFirstNum((u) => [...splitAnswer.toString()]);
+      setOperation(selection);
+
+      setAnswer("");
+    }
+
+    if (firstNum.length > 0) {
+      setOperation(selection);
+    }
+  }
+  function numButtonHandler(selection) {
     if (answer !== "") {
       setAnswer("");
     }
     if (operation === "") {
-      setFirst((value) => [...value, e.target.value]);
+      setFirstNum((value) => [...value, selection]);
     } else {
-      setSecond((value) => [...value, e.target.value]);
-    }
-  }
-
-  // sets the operator
-  function SelectedOperation(e) {
-    if (answer !== "") {
-      const splitAnswer = answer;
-      setFirst((u) => [...splitAnswer.toString()]);
-      setOperation(e.target.value);
-
-      setAnswer("");
+      setSecond((value) => [...value, selection]);
     }
 
-    if (first.length > 0) {
-      setOperation(e.target.value);
-    }
+    console.log(firstNum);
   }
 
   // Clear handler
   function ClearInput() {
     setOperation("");
-    setFirst([]);
+    setFirstNum([]);
     setSecond([]);
     setAnswer("");
   }
@@ -49,10 +52,10 @@ function CalculatorUI() {
       ClearInput();
     }
     // pop() from first number
-    if (first.length > 0 && second.length === 0 && operation === "") {
-      const firstArr = first;
+    if (firstNum.length > 0 && second.length === 0 && operation === "") {
+      const firstArr = firstNum;
       firstArr.pop();
-      setFirst((v) => [...firstArr]);
+      setFirstNum((v) => [...firstArr]);
     }
     // remove operator
     if (second.length === 0 && operation !== "") {
@@ -67,22 +70,22 @@ function CalculatorUI() {
     }
   }
 
-  // calculate function
+  // calculate function ////////////////////
   function Calculate(e) {
     // join array n convert to int
-    const parseFirst = parseFloat(first.join(""));
+    const parseFirst = parseFloat(firstNum.join(""));
     const parseSecond = parseFloat(second.join(""));
 
     // squared operator handler
-    if (e.target.value === "x²" && answer === "") {
+    if (e === "x²" && answer === "") {
       setAnswer(parseFirst * parseFirst);
-      setFirst([]);
+      setFirstNum([]);
     }
 
     // conditions to go further
     if (
       answer !== "" ||
-      first.length === 0 ||
+      firstNum.length === 0 ||
       operation === "" ||
       second.length === 0
     ) {
@@ -113,7 +116,7 @@ function CalculatorUI() {
 
     // clear operation first and second number
     setOperation("");
-    setFirst([]);
+    setFirstNum([]);
     setSecond([]);
   }
 
@@ -131,171 +134,27 @@ function CalculatorUI() {
                 className="form-control text-end fs-4"
                 value={
                   answer === ""
-                    ? first.join("") + " " + operation + " " + second.join("")
+                    ? firstNum.join("") +
+                      " " +
+                      operation +
+                      " " +
+                      second.join("")
                     : answer.toLocaleString("en-US")
                 }
                 disabled
               />
             </div>
+            <CalculatorDisplay />
           </div>
-          <div className="row my-1">
-            <div className="btn-group">
-              <button
-                value="x²"
-                onClick={Calculate}
-                className="btn btn-outline-secondary btn-sm me-1 border rounded shadow-sm"
-              >
-                x²
-              </button>
-              <button
-                onClick={SelectedOperation}
-                value="%"
-                className="btn btn-outline-secondary btn-sm me-1 border rounded shadow-sm"
-              >
-                %
-              </button>
-              <button
-                onClick={SelectedOperation}
-                value="/"
-                className="btn btn-outline-secondary btn-sm me-1 border rounded shadow-sm"
-              >
-                /
-              </button>
-              <button
-                onClick={backspaceHandle}
-                className="btn btn-outline-dark btn-sm me-1 border rounded shadow-sm"
-              >
-                <small>backspace</small>
-              </button>
-            </div>
-          </div>
-          <div className="row ">
-            <div className="btn-group">
-              <button
-                onClick={NumberBtn}
-                value="7"
-                className="btn btn-outline-secondary btn-sm me-1 border rounded shadow-sm"
-              >
-                7
-              </button>
-              <button
-                onClick={NumberBtn}
-                value="8"
-                className="btn btn-outline-secondary btn-sm me-1 border rounded shadow-sm"
-              >
-                8
-              </button>
-              <button
-                onClick={NumberBtn}
-                value="9"
-                className="btn btn-outline-secondary btn-sm me-1 border rounded shadow-sm"
-              >
-                9
-              </button>
-              <button
-                onClick={SelectedOperation}
-                value="-"
-                className="btn btn-outline-secondary btn-sm me-1 border rounded shadow-sm"
-              >
-                -
-              </button>
-            </div>
-          </div>
-          <div className="row mt-1">
-            <div className="btn-group ">
-              <button
-                onClick={NumberBtn}
-                value="4"
-                className="btn btn-outline-secondary btn-sm me-1 border rounded shadow-sm"
-              >
-                4
-              </button>
-              <button
-                onClick={NumberBtn}
-                value="5"
-                className="btn btn-outline-secondary btn-sm me-1 border rounded shadow-sm"
-              >
-                5
-              </button>
-              <button
-                onClick={NumberBtn}
-                value="6"
-                className="btn btn-outline-secondary btn-sm me-1 border rounded shadow-sm"
-              >
-                6
-              </button>
-              <button
-                onClick={SelectedOperation}
-                value="x"
-                className="btn btn-outline-secondary btn-sm me-1 border rounded shadow-sm"
-              >
-                x
-              </button>
-            </div>
-          </div>
-
-          <div className="row mt-1">
-            <div className="btn-group">
-              <button
-                onClick={NumberBtn}
-                value="1"
-                className="btn btn-outline-secondary btn-sm me-1 border rounded shadow-sm"
-              >
-                1
-              </button>
-              <button
-                onClick={NumberBtn}
-                value="2"
-                className="btn btn-outline-secondary btn-sm me-1 border rounded shadow-sm"
-              >
-                2
-              </button>
-              <button
-                onClick={NumberBtn}
-                value="3"
-                className="btn btn-outline-secondary btn-sm me-1 border rounded shadow-sm"
-              >
-                3
-              </button>
-              <button
-                onClick={SelectedOperation}
-                value="+"
-                className="btn btn-outline-secondary btn-sm me-1 border rounded shadow-sm"
-              >
-                +
-              </button>
-            </div>
-          </div>
-          <div className="row mt-1">
-            <div className="btn-group">
-              <button
-                onClick={ClearInput}
-                className="btn btn-danger btn-sm me-1 border rounded shadow-sm"
-              >
-                C
-              </button>
-              <button
-                onClick={NumberBtn}
-                value="0"
-                className="btn btn-outline-secondary btn-sm me-1 border rounded shadow-sm"
-              >
-                0
-              </button>
-              <button
-                onClick={NumberBtn}
-                value="."
-                className="btn btn-outline-secondary btn-sm me-1 border rounded shadow-sm"
-              >
-                .
-              </button>
-              <button
-                onClick={Calculate}
-                className="btn btn-primary btn-sm me-1 border rounded shadow-sm"
-              >
-                =
-              </button>
-            </div>
-          </div>
+          <CalculatorButtons
+            operation={operation}
+            answer={answer}
+            operationHandler={operationHandler}
+            backspaceHandle={backspaceHandle}
+            buttonHandler={numButtonHandler}
+            Calculate={Calculate}
+            clearHandler={ClearInput}
+          />
         </div>
       </div>
     </div>
