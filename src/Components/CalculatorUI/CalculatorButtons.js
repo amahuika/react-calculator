@@ -1,14 +1,24 @@
 function CalculatorButtons(props) {
+  function buttonHandle(e) {
+    if (props.answer !== "") {
+      props.answerHandler("");
+    }
+    if (props.operation === "") {
+      props.firstNumHandler(e.target.value);
+    } else {
+      props.secondNumHandler(e.target.value);
+    }
+  }
+
   function SelectOperationHandler(e) {
     props.operationHandler(e.target.value);
   }
-  function NumberBtn(e) {
-    props.buttonHandler(e.target.value);
-  }
+
   function Squared(e) {
     console.log(e.target.value);
     props.Calculate(e.target.value);
   }
+
   return (
     <div>
       <div className="row my-1">
@@ -45,21 +55,21 @@ function CalculatorButtons(props) {
       <div className="row ">
         <div className="btn-group">
           <button
-            onClick={NumberBtn}
+            onClick={buttonHandle}
             value="7"
             className="btn btn-outline-secondary btn-sm me-1 border rounded shadow-sm"
           >
             7
           </button>
           <button
-            onClick={NumberBtn}
+            onClick={buttonHandle}
             value="8"
             className="btn btn-outline-secondary btn-sm me-1 border rounded shadow-sm"
           >
             8
           </button>
           <button
-            onClick={NumberBtn}
+            onClick={buttonHandle}
             value="9"
             className="btn btn-outline-secondary btn-sm me-1 border rounded shadow-sm"
           >
@@ -77,21 +87,21 @@ function CalculatorButtons(props) {
       <div className="row mt-1">
         <div className="btn-group ">
           <button
-            onClick={NumberBtn}
+            onClick={buttonHandle}
             value="4"
             className="btn btn-outline-secondary btn-sm me-1 border rounded shadow-sm"
           >
             4
           </button>
           <button
-            onClick={NumberBtn}
+            onClick={buttonHandle}
             value="5"
             className="btn btn-outline-secondary btn-sm me-1 border rounded shadow-sm"
           >
             5
           </button>
           <button
-            onClick={NumberBtn}
+            onClick={buttonHandle}
             value="6"
             className="btn btn-outline-secondary btn-sm me-1 border rounded shadow-sm"
           >
@@ -110,21 +120,21 @@ function CalculatorButtons(props) {
       <div className="row mt-1">
         <div className="btn-group">
           <button
-            onClick={NumberBtn}
+            onClick={buttonHandle}
             value="1"
             className="btn btn-outline-secondary btn-sm me-1 border rounded shadow-sm"
           >
             1
           </button>
           <button
-            onClick={NumberBtn}
+            onClick={buttonHandle}
             value="2"
             className="btn btn-outline-secondary btn-sm me-1 border rounded shadow-sm"
           >
             2
           </button>
           <button
-            onClick={NumberBtn}
+            onClick={buttonHandle}
             value="3"
             className="btn btn-outline-secondary btn-sm me-1 border rounded shadow-sm"
           >
@@ -148,14 +158,14 @@ function CalculatorButtons(props) {
             C
           </button>
           <button
-            onClick={NumberBtn}
+            onClick={buttonHandle}
             value="0"
             className="btn btn-outline-secondary btn-sm me-1 border rounded shadow-sm"
           >
             0
           </button>
           <button
-            onClick={NumberBtn}
+            onClick={buttonHandle}
             value="."
             className="btn btn-outline-secondary btn-sm me-1 border rounded shadow-sm"
           >

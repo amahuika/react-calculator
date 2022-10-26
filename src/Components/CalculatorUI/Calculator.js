@@ -11,6 +11,15 @@ function CalculatorUI() {
   const [operation, setOperation] = useState("");
   const [answer, setAnswer] = useState("");
 
+  function firstNumHandler(selectedNum) {
+    setFirstNum((value) => [...value, selectedNum]);
+  }
+  function secondNumHandler(selectedNum) {
+    setSecond((value) => [...value, selectedNum]);
+  }
+  function answerHandler(answer) {
+    setAnswer(answer);
+  }
   // add number on click to array
   function operationHandler(selection) {
     if (answer !== "") {
@@ -25,18 +34,6 @@ function CalculatorUI() {
       setOperation(selection);
     }
   }
-  function numButtonHandler(selection) {
-    if (answer !== "") {
-      setAnswer("");
-    }
-    if (operation === "") {
-      setFirstNum((value) => [...value, selection]);
-    } else {
-      setSecond((value) => [...value, selection]);
-    }
-
-    console.log(firstNum);
-  }
 
   // Clear handler
   function ClearInput() {
@@ -49,10 +46,10 @@ function CalculatorUI() {
   // back space handler
   function backspaceHandle() {
     if (answer !== "") {
-      ClearInput();
+      setAnswer("");
     }
     // pop() from first number
-    if (firstNum.length > 0 && second.length === 0 && operation === "") {
+    if (firstNum.length > 0 && operation === "") {
       const firstArr = firstNum;
       firstArr.pop();
       setFirstNum((v) => [...firstArr]);
@@ -128,30 +125,21 @@ function CalculatorUI() {
             <div>
               <h2>React Calculator</h2>
             </div>
-            <div className="">
-              <input
-                type="text"
-                className="form-control text-end fs-4"
-                value={
-                  answer === ""
-                    ? firstNum.join("") +
-                      " " +
-                      operation +
-                      " " +
-                      second.join("")
-                    : answer.toLocaleString("en-US")
-                }
-                disabled
-              />
-            </div>
-            <CalculatorDisplay />
+            <CalculatorDisplay
+              firstNum={firstNum}
+              second={second}
+              operation={operation}
+              answer={answer}
+            />
           </div>
           <CalculatorButtons
             operation={operation}
             answer={answer}
+            answerHandler={answerHandler}
             operationHandler={operationHandler}
             backspaceHandle={backspaceHandle}
-            buttonHandler={numButtonHandler}
+            firstNumHandler={firstNumHandler}
+            secondNumHandler={secondNumHandler}
             Calculate={Calculate}
             clearHandler={ClearInput}
           />
